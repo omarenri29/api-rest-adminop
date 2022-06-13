@@ -3,9 +3,9 @@ import User from "../models/User.js";
 const { NODE_ENV } = process.env;
 
 const checkAuth = async (req, res, next) => {
-  if (NODE_ENV === "development" || NODE_ENV === "test") {
-    return next();
-  }
+  // if (NODE_ENV === "development" || NODE_ENV === "test") {
+  //   return next();
+  // }
   let token;
 
   if (

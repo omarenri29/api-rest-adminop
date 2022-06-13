@@ -1,88 +1,104 @@
 import User from "../models/User.js";
+import { validationResult } from 'express-validator';
 import bcrypt from "bcrypt";
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => {
-      res.send(users);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-};
 
-const getUserById = (req, res) => {
-  User.findById(req.params.id)
-    .then((user) => {
-      res.send(user);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-};
-
-const addUser = (req, res) => {
-  const { name, password, email, rol } = req.body;
-  if (!name || !password || !email || !rol) {
-    return res.status(400).json({
-      message: "Missing parameters",
-    });
+const getUsers = async (req, res) => {
+  //Validar si hay errores    
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
-  const saltRounds = 10;
 
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) {
-      res.send(err);
-    } else {
-      const newUser = new User({
-        name,
-        password: hash,
-        email,
-        rol,
-      });
-      newUser
-        .save()
-        .then((user) => {
-          res.send(user);
-        })
-        .catch((err) => {
-          res.send(err);
-        });
+  try {
+    const filter = {};
+    const users = await User.find(filter);
+
+    if (!users) {
+      return res.status(400).json({ msg: 'No existe ningun Usuario' })
     }
-  });
-};
-const updateUser = (req, res) => {
-  const { name, password, email, rol } = req.body;
-  if (!name || !password || !email || !rol) {
-    return res.status(400).json({
-      message: "Missing parameters",
-    });
+    res.json({ users });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ msg: 'Hubo un error' });
   }
-  const saltRounds = 10;
-  const passwordHash = bcrypt.hashSync(password, saltRounds);
-  const { id } = req.params;
-  const newUser = {
-    name,
-    password: passwordHash,
-    email,
-    rol,
-  };
-
-  User.findByIdAndUpdate(id, newUser, { new: true })
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-};
-const deleteUser = (req, res) => {
-  User.findByIdAndDelete(req.params.id)
-    .then((user) => {
-      res.send(user);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
 };
 
-export { getUsers, addUser, getUserById, updateUser, deleteUser };
+const getUserById = async (req, res) => {
+  //Validar si hay errores    
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(400).json({ msg: 'El usuario no existe' })
+    }
+    res.json({ user });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ msg: 'Hubo un error' });
+  }
+};
+
+const createUser = async (req, res) => {
+  //Validar si hay errores    
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    const user = new User(req.body);
+    const savedUser = await user.save();
+
+    res.json(savedUser);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ msg: 'Hubo un error' });
+  }
+};
+
+const updateUser = async (req, res) => {
+  //Validar si hay errores    
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    let user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(400).json({ msg: 'Usuario no encontrado' })
+    }
+    user = await User.findByIdAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
+    res.json({ user })
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ msg: 'Hubo un error' });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  //Validar si hay errores    
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    let user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(400).json({ msg: 'Usuario no encontrado' });
+    }
+    await User.findOneAndRemove({ _id: req.params.id });
+    res.json({ msg: 'Usuario eliminado' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ msg: 'Hubo un error' });
+  }
+};
+
+export { getUsers, createUser, getUserById, updateUser, deleteUser };
