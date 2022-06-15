@@ -6,6 +6,7 @@ import rolesRoutes from "./routes/rolesRoutes.js";
 import usersRouter from "./routes/usersRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import {logger} from './config/logger.js'
 
 const app = express();
 dotenv.config();
@@ -28,7 +29,7 @@ const PORT = process.env.PORT || 4000;
 
 const server = app.listen(PORT, () => {
   if (process.env.NODE_ENV !== 'test') {
-    console.log(`servidor corriendo en el puerto ${PORT}`);
+    logger.error(`servidor corriendo en el puerto ${PORT}`);
   }  
 });
 

@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import jwt from 'jsonwebtoken'
 
-const checkRole = async (req, res, next) => {
+const checkSameUser = async (req, res, next) => {
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
         try {
@@ -13,7 +13,11 @@ const checkRole = async (req, res, next) => {
             const user = await User.findOne({ id });
             //Validar tipo de usuario
             //Si es admin pasa
-            if(user.role)
+            if(user.role !== 'user') next();
+
+            //Valiar si el usuario que está haciendo la petición es igual al id que recibimos como parametro
+            //Un usuario solo puede ver sus propios datos
+
             if (!user) {
                 return res.status(404).json({ msg: "Usuario administrador no existe" });
             }
@@ -31,4 +35,4 @@ const checkRole = async (req, res, next) => {
 }
 
 
-export default checkRole;
+export default checkSameUser;

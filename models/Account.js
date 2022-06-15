@@ -8,16 +8,16 @@ const accountSchema = mongoose.Schema({
     },
     name_client: {
         type: String,
-        require: true, 
+        require: true,
         trim: true
-    }, 
+    },
     name_responsible: {
         type: String,
         require: true,
         trim: true,
     },
     team: {
-        type: Array, 
+        type: Array,
         require: true
     }
 },
