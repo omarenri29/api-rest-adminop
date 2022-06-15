@@ -8,15 +8,14 @@ const checkRole = (permissions) => {
             try {
                 token = req.headers.authorization.split(" ")[1];
                 const decoded = jwt.verify(token, process.env.JWT_SECRETA);
-                const { id } = decoded;
-                console.log(id)
+                const { id } = decoded;                
                 const user = await User.findById(id);
                 if(!user){
                     return res.status(404).json({ msg: "Usuario administrador no existe" });
                 }
                 
                 const userRole = user.role;                
-                console.log(userRole)
+                
                 if (permissions.includes(userRole)) {
                     next()
                 } else {
