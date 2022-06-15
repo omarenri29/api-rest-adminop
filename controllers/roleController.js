@@ -1,14 +1,14 @@
-import Rol from "../models/Rol.js";
+import Role from "../models/Role.js";
 
 const getRoles = async (req, res) => {
-  const roles = await Rol.find();
+  const roles = await Role.find();
   res.json(roles);
 };
 
 const getRolById = async (req, res) => {
   const { id } = req.params;
-  const rol = await Rol.findById(id);
-  res.json(rol);
+  const role = await Role.findById(id);
+  res.json(role);
 };
 const addRol = async (req, res) => {
   const { name, title, permissions } = req.body;
@@ -17,14 +17,14 @@ const addRol = async (req, res) => {
       message: "Missing parameters",
     });
   }
-  const rol = new Rol({
+  const role = new Role({
     name,
     title,
     permissions,
   });
-  await rol.save();
+  await role.save();
   res.json({
-    message: "Rol saved successfully",
+    message: "Role saved successfully",
   });
 };
 const updateRol = async (req, res) => {
@@ -35,14 +35,14 @@ const updateRol = async (req, res) => {
       message: "Missing parameters",
     });
   }
-  const rol = {
+  const role = {
     name,
     title,
     permissions,
   };
-  await Rol.findByIdAndUpdate(id, rol, { new: true });
+  await Role.findByIdAndUpdate(id, role, { new: true });
   res.json({
-    message: "Rol updated successfully",
+    message: "Role updated successfully",
   });
 };
 export { getRoles, getRolById, addRol, updateRol };

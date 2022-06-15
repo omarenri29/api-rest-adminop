@@ -49,13 +49,23 @@ const createUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
-  }
-  try {
+  }  
+
+  const {email, password} = req.body;
+
+  try {    
+    const userExists = await User.findOne({email});
+    if(userExists){
+      const error = new Error('El usuario ya existe')
+      return res.status(400).send({ msg: error.message });
+    }
+
     const user = new User(req.body);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+
     const savedUser = await user.save();
-
-    res.json(savedUser);
-
+    res.json(savedUser); 
   } catch (error) {
     console.log(error);
     res.status(500).send({ msg: 'Hubo un error' });

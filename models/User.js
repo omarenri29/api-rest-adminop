@@ -18,10 +18,24 @@ const userSchema = mongoose.Schema(
       require: true,
       trim: true,
       unique: true,
+      immutable: true
     },
-    rol: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Rol",
+    role: {
+      type: String,
+      default: 'user',
+      require: true,
+      enum: ['user', 'admin', 'superadmin']
+    },
+    english_level: {
+      type: Number,    
+      require: true,
+    },
+    technical_knowledge: {
+      type: String,      
+      require: true,
+    },
+    cv_url: {
+      type: String,      
       require: true,
     },
   },

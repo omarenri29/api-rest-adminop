@@ -6,4 +6,4 @@ const generarJWT = (id) => {
     });
 }
 
-export default generarJWT;
+export default generarJWT; 

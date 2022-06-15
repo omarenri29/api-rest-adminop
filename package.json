@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=development PORT=8080 nodemon index.js"
+    "dev": "cross-env NODE_ENV=development PORT=8080 nodemon index.js",
+    "seed": "node seeder.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "mongodb-memory-server": "^8.5.2",
     "mongoose": "^6.3.3",
     "mongoose-seed": "^0.6.0",
+    "mongoose-seeder": "^1.2.1",
     "mongoose-unique-validator": "^3.0.0",
     "swagger-ui-express": "^4.4.0"
   },

@@ -31,6 +31,4 @@ const clearDataBase = async () => {
     }
 }
 
-
-
 export {connect, closeDataBase, clearDataBase};
