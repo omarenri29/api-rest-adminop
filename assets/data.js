@@ -1,7 +1,7 @@
 let data =
 {
     name: "Omar Arredondo",
-    email: "omar@gmail.com",
+    email: "superadmin@gmail.com",
     password: "123",
     role: "superadmin",
     english_level: 100,
@@ -9,4 +9,4 @@ let data =
     cv_url: "https://omar"
 };
 
-export { data };
+export { data }; 

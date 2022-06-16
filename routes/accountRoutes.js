@@ -1,8 +1,8 @@
 import express from 'express';
 import { check } from 'express-validator';
 import checkAuth from '../middleware/checkAuth.js';
-const router = express.Router();
-
+import checkRole from "../middleware/checkRole.js";
+import { roles } from '../common/constants/constants.js';
 import {
     getAccounts,
     getAccountById,
@@ -11,8 +11,9 @@ import {
     delateAccount
 } from '../controllers/accountController.js'
 
+const router = express.Router();
 //Crear cuenta
-router.post('/', checkAuth,
+router.post('/', checkRole([roles.admin, roles.superadmin]), checkAuth,
     [
         check('name_account', 'El nombre de la cuenta es obligatorio').notEmpty(),
         check('name_client', 'El nombre del cliente es obligatorio').notEmpty(),
@@ -20,12 +21,12 @@ router.post('/', checkAuth,
     ],
     createAccount);
 //Obtener todas las cuentas
-router.get('/', checkAuth, getAccounts);
+router.get('/', checkRole([roles.admin, roles.superadmin]), checkAuth, getAccounts);
 //Obtener cuenta por id
-router.get('/:id', checkAuth, getAccountById);
+router.get('/:id', checkRole([roles.admin, roles.superadmin]), checkAuth, getAccountById);
 //Actualizar cuenta
-router.put('/:id', checkAuth, updateAccount);
+router.put('/:id', checkRole([roles.admin, roles.superadmin]), checkAuth, updateAccount);
 //Eliminar Cuenta
-router.delete('/:id', checkAuth, delateAccount);
+router.delete('/:id', checkRole([roles.admin, roles.superadmin]), checkAuth, delateAccount);
 
 export default router;
