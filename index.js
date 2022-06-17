@@ -6,6 +6,7 @@ import cors from "cors";
 import usersRouter from "./routes/usersRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import teamRoutes from "./routes/teamRoutes.js";
 import {logger} from './config/logger.js'
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(express.json());
 //app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/users", usersRouter);
 app.use("/api/account", accountRoutes);
+app.use("/api/team", teamRoutes);
 app.use("/api/auth", authRoutes);
 
 const PORT = process.env.PORT || 4000;

@@ -1,4 +1,5 @@
 import Account from "../models/Account.js";
+import User from "../models/User.js";
 import { validationResult } from 'express-validator';
 
 const getAccounts = async (req, res) => {
@@ -101,4 +102,34 @@ const delateAccount = async (req, res) => {
     }
 }
 
-export { getAccounts, getAccountById, createAccount, updateAccount, delateAccount };
+const addUserTeam = async (req, res) => {
+
+    try {
+        //Validar si el usuario a agregar existe
+        
+        const { user_id, account_id } = req.body;
+        const user = await User.findById(user_id);
+        
+        if (!user) {
+            res.status(400).json({ msg: 'El usuario a agregar no existe' })
+        }
+
+        const account = await Account.findById(account_id);        
+        if (!account) {
+            res.status(400).json({ msg: 'El equipo al que se quiere agregar el usuario no existe' })
+        }
+        account.team.push(user);
+        account.save();
+        res.json(account);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ msg: 'Hubo un error' });
+    }
+}
+
+const removeUserTeam = (req, res) => {
+
+}
+
+export { getAccounts, getAccountById, createAccount, updateAccount, delateAccount, addUserTeam, removeUserTeam }; 

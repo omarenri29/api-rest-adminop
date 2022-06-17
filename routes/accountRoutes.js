@@ -8,7 +8,9 @@ import {
     getAccountById,
     createAccount,
     updateAccount,
-    delateAccount
+    delateAccount,
+    addUserTeam,
+    removeUserTeam
 } from '../controllers/accountController.js'
 
 const router = express.Router();
@@ -28,5 +30,12 @@ router.get('/:id', checkRole([roles.admin, roles.superadmin]), checkAuth, getAcc
 router.put('/:id', checkRole([roles.admin, roles.superadmin]), checkAuth, updateAccount);
 //Eliminar Cuenta
 router.delete('/:id', checkRole([roles.admin, roles.superadmin]), checkAuth, delateAccount);
+
+
+//Equipos
+//Agregar usuarios de los equipos
+router.put('/team/', addUserTeam);
+//Quitar usuarios de los equipos
+router.delete('/team', checkRole([roles.admin, roles.superadmin]), checkAuth, removeUserTeam);
 
 export default router;

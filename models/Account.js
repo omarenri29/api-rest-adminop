@@ -17,8 +17,11 @@ const accountSchema = mongoose.Schema({
         trim: true,
     },
     team: {
-        type: Array,
-        require: true
+        type: [{
+            user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},            
+            initDate: {type: Date, default: Date.now()},
+            endDate: {type: String, default: ""}
+        }]
     }
 },
     {
